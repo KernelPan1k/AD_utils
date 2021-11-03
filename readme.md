@@ -61,7 +61,7 @@ Commands
 
 - Get current domain
 
-```
+```powershell
 Get-NetDomain #(PowerView)
 Get-ADDomain # (ActiveDirectory Module)
 ```
@@ -69,7 +69,7 @@ Get-ADDomain # (ActiveDirectory Module)
 
 - Get object of another domain
 
-```
+```powershell
 Get-NetDomain –Domain moneycorp.local
 Get-ADDomain -Identity moneycorp.local
 ```
@@ -77,41 +77,41 @@ Get-ADDomain -Identity moneycorp.local
 
 - Get domain SID for the current domain
 
-```
+```powershell
 Get-DomainSID
 (Get-ADDomain).DomainSID
 ```
 
 - Get domain policy for the current domain
 
-```
+```powershell
 Get-DomainPolicy
 (Get-DomainPolicy)."system access"
 ```
 
 - Get domain policy for another domain
 
-```
+```powershell
 (Get-DomainPolicy –domain moneycorp.local)."systemaccess"
 ```
 
 - Get domain controllers for the current domain
 
-```
+```powershell
 Get-NetDomainController
 Get-ADDomainController
 ```
 
 - Get domain controllers for another domain
 
-```
+```powershell
 Get-NetDomainController –Domain moneycorp.local
 Get-ADDomainController -DomainName moneycorp.local -Discover
 ```
 
 - Get a list of users in the current domain
 
-```
+```powershell
 Get-NetUser
 Get-NetUser –Username student1
 Get-ADUser -Filter * -Properties *
@@ -120,7 +120,7 @@ Get-ADUser -Identity student1 -Properties *
 
 - Get list of all properties for users in the current domain
 
-```
+```powershell
 Get-UserProperty
 Get-UserProperty –Properties pwdlastset
 Get-ADUser -Filter * -Properties * | select -First 1 | Get-Member -MemberType *Property | select Name
@@ -129,14 +129,14 @@ Get-ADUser -Filter * -Properties * | select name,@{expression={[datetime]::fromF
 
 - Search for a particular string in a user's attributes:
 
-```
+```powershell
 Find-UserField -SearchField Description -SearchTerm "built"
 Get-ADUser -Filter 'Description -like "*built*"' -Properties Description | select name,Description
 ```
 
 - Get a list of computers in the current domain
 
-```
+```powershell
 Get-NetComputer
 Get-NetComputer –OperatingSystem "*Server 2016*"
 Get-NetComputer -Ping
@@ -149,14 +149,14 @@ Get-ADComputer -Filter * -Properties *
 
 - Get all groups containing the word "admin" in group name
 
-```
+```powershell
 Get-NetGroup *admin*
 Get-ADGroup -Filter 'Name -like "*admin*"' | select Name
 ```
 
 - Get all the members of the Domain Admins group
 
-```
+```powershell
 Get-NetGroupMember -GroupName "Domain Admins" -Recurse
 Get-ADGroupMember -Identity "Domain Admins" -Recursive
 ```
@@ -164,62 +164,62 @@ Get-ADGroupMember -Identity "Domain Admins" -Recursive
 
 - Get the group membership for a user:
 
-```
+```powershell
 Get-NetGroup –UserName "student1"
 Get-ADPrincipalGroupMembership -Identity student1
 ```
 
 - List all the local groups on a machine (needs administrator privs on non-dc machines) :
 
-```
+```powershell
 Get-NetLocalGroup -ComputerName dcorp-dc.dollarcorp.moneycorp.local -ListGroups
 ```
 
 - Get members of all the local groups on a machine (needs administrator privs on non-dc machines)
 
-```
+```powershell
 Get-NetLocalGroup -ComputerName dcorp-dc.dollarcorp.moneycorp.local -Recurse
 ```
 
 - Get actively logged users on a computer (needs local admin rights on the target)
 
-```
+```powershell
 Get-NetLoggedon –ComputerName <servername>
 ```
 
 - Get locally logged users on a computer (needs remote registry on the target - started by-default on server OS)
 
-```
+```powershell
 Get-LoggedonLocal -ComputerName dcorp-dc.dollarcorp.moneycorp.local
 ```
 
 - Get the last logged user on a computer (needs administrative rights and remote registry on the target)
 
-```
+```powershell
 Get-LastLoggedOn –ComputerName <servername>
 ```
 
 - Find shares on hosts in current domain.
 
-```
+```powershell
 Invoke-ShareFinder –Verbose
 ```
 
 - Find sensitive files on computers in the domain
 
-```
+```powershell
 Invoke-FileFinder –Verbose
 ```
 
 - Get all fileservers of the domain
 
-```
+```powershell
 Get-NetFileServer
 ```
 
 - Get list of GPO in current domain.
 
-```
+```powershell
 Get-NetGPO
 Get-NetGPO -ComputerName dcorp-student1.dollarcorp.moneycorp.local
 Get-GPO -All #(GroupPolicy module)
@@ -228,26 +228,26 @@ Get-GPResultantSetOfPolicy -ReportType Html -Path C:\Users\Administrator\report.
 
 - Get GPO(s) which use Restricted Groups or groups.xml for interesting users
 
-```
+```powershell
 Get-NetGPOGroup
 ```
 
 - Get users which are in a local group of a machine using GPO
 
-```
+```powershell
 Find-GPOComputerAdmin –Computername dcorp-student1.dollarcorp.moneycorp.local
 ```
 
 
 - Get machines where the given user is member of a specific group
 
-```
+```powershell
 Find-GPOLocation -UserName student1 -Verbose
 ```
 
 - Get OUs in a domain
 
-```
+```powershell
 Get-NetOU -FullData
 Get-ADOrganizationalUnit -Filter * -Properties *
 ```
@@ -255,50 +255,50 @@ Get-ADOrganizationalUnit -Filter * -Properties *
 
 - Get GPO applied on an OU. Read GPOname from gplink attribute from Get-NetOU
 
-```
+```powershell
 Get-NetGPO -GPOname "{AB306569-220D-43FF-B03B-83E8F4EF8081}"
 Get-GPO -Guid AB306569-220D-43FF-B03B-83E8F4EF8081 #(GroupPolicy module)
 ```
 
 - Get the ACLs associated with the specified object
 
-```
+```powershell
 Get-ObjectAcl -SamAccountName student1 –ResolveGUIDs
 ```
 
 - Get the ACLs associated with the specified prefix to be used for search
 
-```
+```powershell
 Get-ObjectAcl -ADSprefix 'CN=Administrator,CN=Users' -Verbose
 ```
 
 - We can also enumerate ACLs using ActiveDirectory module but without resolving GUIDs
 
-```
+```powershell
 (Get-Acl'AD:\CN=Administrator,CN=Users,DC=dollarcorp,DC=moneycorp,DC=local').Access
 ```
 
 - Get the ACLs associated with the specified LDAP path to be used for search
 
-```
+```powershell
 Get-ObjectAcl -ADSpath "LDAP://CN=DomainAdmins,CN=Users,DC=dollarcorp,DC=moneycorp,DC=local" -ResolveGUIDs -Verbose
 ```
 
 - Search for interesting ACEs
 
-```
+```powershell
 Invoke-ACLScanner -ResolveGUIDs
 ```
 
 - Get the ACLs associated with the specified path
 
-```
+```powershell
 Get-PathAcl -Path "\\dcorp-dc.dollarcorp.moneycorp.local\sysvol"
 ```
 
 - Get a list of all domain trusts for the current domain
 
-```
+```powershell
 Get-NetDomainTrust
 Get-NetDomainTrust –Domain us.dollarcorp.moneycorp.local
 Get-ADTrust
@@ -307,7 +307,7 @@ Get-ADTrust –Identity us.dollarcorp.moneycorp.local
 
 - Get details about the current forest
 
-```
+```powershell
 Get-NetForest
 Get-NetForest –Forest eurocorp.local
 Get-ADForest
@@ -317,7 +317,7 @@ Get-ADForest –Identity eurocorp.local
 
 -Get all domains in the current forest
 
-```
+```powershell
 Get-NetForestDomain
 Get-NetForestDomain –Forest eurocorp.local
 (Get-ADForest).Domains
@@ -325,7 +325,7 @@ Get-NetForestDomain –Forest eurocorp.local
 
 - Get all global catalogs for the current forest
 
-```
+```powershell
 Get-NetForestCatalog
 Get-NetForestCatalog –Forest eurocorp.local
 Get-ADForest | select -ExpandProperty GlobalCatalogs
@@ -334,7 +334,7 @@ Get-ADForest | select -ExpandProperty GlobalCatalogs
 
 - Map trusts of a forest
 
-```
+```powershell
 Get-NetForestTrust
 Get-NetForestTrust –Forest eurocorp.local
 Get-ADTrust -Filter 'msDS-TrustForestTrustInfo -ne "$null"'
@@ -342,19 +342,19 @@ Get-ADTrust -Filter 'msDS-TrustForestTrustInfo -ne "$null"'
 
 - Find all machines on the current domain where the current user has local admin access
 
-```
+```powershell
 Find-LocalAdminAccess –Verbose 
 ```
 
 - Find local admins on all machines of the domain (needs administrator privs on non-dc machines).
 
-```
+```powershell
 Invoke-EnumerateLocalAdmin –Verbose
 ```
 
 - Find computers where a domain admin (or specified user/group) has sessions:
 
-```
+```powershell
 Invoke-UserHunter
 Invoke-UserHunter -GroupName "RDPUsers"
 ```
@@ -362,13 +362,13 @@ Invoke-UserHunter -GroupName "RDPUsers"
 
 - To confirm admin access
 
-```
+```powershell
 Invoke-UserHunter -CheckAccess
 ```
 
 - Find computers where a domain admin is logged-in
 
-```
+```powershell
 Invoke-UserHunter -Stealth
 ```
 
